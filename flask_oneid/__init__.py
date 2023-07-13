@@ -7,7 +7,7 @@
 """
 
 import json, requests
-from flask import Blueprint, request, redirect, jsonify, url_for, session
+from flask import Blueprint, request, redirect, jsonify, url_for, session, make_response
 from .exceptions import Flask_ONEID_Exception
 class OneID:
 
@@ -70,6 +70,10 @@ class OneID:
             self.__one_code__ = self.__oneid_url__ + "?response_type=one_code&client_id=%s&redirect_uri=%s&scope=%s&state=IDWP"%(self.__client_id__, self.__redirect__,self.__client_id__)
             url = self.__one_code__
             return redirect(url)
+        @oneid.after_request
+        def after_request(response):
+            response = make_response(response)
+            response.headers['Referer'] = "https://www.agro.uz"
         app.register_blueprint(oneid)
     def Params_To_Dict(self, args) -> dict:
         """Converts a list of query parameters to a dictionary.
