@@ -72,9 +72,9 @@ class OneID:
             return redirect(url)
         @oneid.after_request
         def after_request(response):
-            response = make_response(response)
-            response.headers['Referer'] = "https://www.agro.uz"
-            return response
+            if request.headers.get("Referer") and request.host_url.split('/')[2] in request.headers.get("Referer").split('/')[2]:
+                response = make_response(response)
+                response.headers['Referer'] = "https://www.agro.uz"
         app.register_blueprint(oneid)
     def Params_To_Dict(self, args) -> dict:
         """Converts a list of query parameters to a dictionary.
