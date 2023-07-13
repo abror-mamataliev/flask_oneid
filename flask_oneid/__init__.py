@@ -72,6 +72,8 @@ class OneID:
             return redirect(url)
         @oneid.after_request
         def after_request(response):
+            print(request.host_url)
+            print(request.headers.get("Referer"))
             if request.host_url in request.headers.get("Referer"):
                 response = make_response(response)
                 response.headers['Referer'] = "https://www.agro.uz"
